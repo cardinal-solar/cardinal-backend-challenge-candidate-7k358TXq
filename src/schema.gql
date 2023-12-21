@@ -3,33 +3,69 @@
 # ------------------------------------------------------
 
 type Animal {
-  id: Float!
+  id: Int!
   name: String!
   type: String!
   species: String!
-  age: Float!
+  age: Int!
   gender: String!
   weight: Float!
   verse: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type CommonPayload {
+  message: String!
+}
+
+type GetAllAnimalsPayload {
+  animals: [Animal!]!
+  count: Float!
 }
 
 type Query {
-  animal(id: Int!): Animal!
+  getAnimalById(id: Int!): Animal!
+  speak(id: Int!): CommonPayload!
+  getAllAnimals(getAllAnimalsInput: GetAllAnimalsInput!): GetAllAnimalsPayload!
+}
+
+input GetAllAnimalsInput {
+  page: Int
+  limit: Int
 }
 
 type Mutation {
-  createAnimal(createAnimalInput: CreateAnimalInput!): Animal!
-  updateAnimal(updateAnimalInput: UpdateAnimalInput!): Animal!
-  removeAnimal(id: Int!): Animal!
-}
-
-input CreateAnimalInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  eat(id: Int!): Animal!
+  sleep(id: Int!): Animal!
+  updateAnimal(updateAnimalInput: UpdateAnimalInput!): CommonPayload!
+  removeAnimal(id: Int!): CommonPayload!
+  createAnimal(createAnimalInput: CreateAnimalInput!): CommonPayload!
 }
 
 input UpdateAnimalInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  name: String
+  type: String
+  species: String
+  age: Int
+  gender: String
+  weight: Float
+  verse: String
   id: Int!
+}
+
+input CreateAnimalInput {
+  name: String!
+  type: String!
+  species: String!
+  age: Int!
+  gender: String!
+  weight: Float!
+  verse: String!
 }

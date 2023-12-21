@@ -1,10 +1,10 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType, Int } from "@nestjs/graphql";
 
 @InputType()
 export class GetAllAnimalsInput{
-    @Field(() => Number, { nullable: true })
+    @Field(() => Int, { nullable: true })
     page: number;
 
-    @Field(() => Number, { nullable: true })
+    @Field(() => Int, { nullable: true })
     limit: number;
 }

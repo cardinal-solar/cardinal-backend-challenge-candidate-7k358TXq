@@ -12,7 +12,7 @@ export class CreateAnimalInput {
   @Field(() => String)
   species: string;
 
-  @Field(() => Number)
+  @Field(() => Int)
   age: number;
 
   @Field(() => String)

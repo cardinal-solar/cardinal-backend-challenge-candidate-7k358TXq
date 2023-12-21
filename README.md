@@ -1,69 +1,169 @@
-# Cardinal backend challenge
+To query anything, you would have to go to localhost:3000/graphql. It will open up playground.
 
-## Introduction
+----------------------------------------------------------------------------------------------
 
-Welcome to our backend challenge! This challenge is designed to test your ability to write clean, well-documented, and efficient code. We will be looking at your code structure, your use of best practices, and your ability to write tests.
+For guard implmentation, I used the simplest way of doing it by using API KEYS.
+So everytime, you need to pass the api-key in headers like this with every request.
 
-## The Challenge
+{
+  "api-key": "cardinal"
+}
 
-Your objective is to create a simple server-side application that will allow users to retrieve, add, update and delete an animal dataset (in memory). The dataset should contain the following fields:
+---------------------------------API ENDPOINTS------------------------------------------------
 
-- `id` (integer)
-- `name` (string)
-- `type` (string)
-- `species` (string)
-- `age` (integer)
-- `gender` (string)
-- `weight` (float)
-- `verse` (string)
+To create animal, you can use this query. returns a string message.
 
-Each animal need to have some sort of interface that will allow user to interact with animal by api calls.
-What is expected is that an animal can perform the following operations:
-- `eat` - increase weight
-- `sleep` - increase age
-- `speak` - return a string with the animal's verse (e.g. "The cow goes moo")
+mutation CreateNewAnimal($input: CreateAnimalInput!) {
+  createAnimal(createAnimalInput: $input) {
+    message
+  }
+}
 
-The application should be able to perform the following operations:
-- `Retrieve all animals`
-- `Retrieve a single animal by id`
-- `Add a new animal`
-- `Update an existing animal by id`
-- `Delete an existing animal by id`
+INPUT
 
-optional:
-- `Increase weight of an animal by id`
-- `Increase age of an animal by id`
-- `Return a string with the animal's verse`
+{
+  "input": {
+    "name": "Buddy",
+    "type": "Dog",
+    "species": "Golden Retriever",
+    "age": 2,
+    "gender": "Male",
+    "weight": 25.5,
+    "verse": "Woof woof!"
+  }
+}
 
-## Optional tasks
+-------------------------------------------------------------------------------------------------
+Get Single Animal Query
 
-- Create documentation for your API using Swagger [[Swagger documentation](https://swagger.io/)].
-- Use database to store data.
-- Implement a guard that can manage request security.
-- Create a Dockerfile to run your application in a container.
+query GetSingleAnimal {
+  getAnimalById(id: 1) {
+    id
+    name
+    type
+    species
+    age
+    gender
+    weight
+    verse
+    createdAt
+    updatedAt
+    deletedAt
+  }
+}
 
-## Bonus points
+--------------------------------------------------------------------------------------------------
+Get All Animals Endpoint, this uses pagination as well. Returns count and array of animals
 
-- Make animal's verse configurable.
-- Make animal dataset unique for each user.
-- Use TypeScript [[Docs](https://www.typescriptlang.org/docs/)].
-- Choose NestJS as the framework of your choice [[Docs](https://nestjs.com/)].
-- Utilize Mongodb as database [[Docs](https://www.mongodb.com/docs/manual/)].
-- Manage your tasks using GitHub Projects.
-- Write unit tests for your code.
+query GetAllAnimals($getAllAnimalsInput: GetAllAnimalsInput!) {
+  getAllAnimals(getAllAnimalsInput: $getAllAnimalsInput) {
+    animals {
+      id
+      name
+      type
+      species
+      age
+      gender
+      weight
+      verse
+      createdAt
+      updatedAt
+      deletedAt
+    }
+    count
+  }
+}
 
-## Submission Guidelines
+Input this to get all animals data
 
-- Create a new branch for your work.
-- Commit your changes regularly with clear and descriptive commit messages.
-- Create a `HOW_TO_RUN.md` file with instructions on how to run your application.
-- Once you are finished, submit a pull request with your completed solution.
-- Assign these GitHub accounts as reviewer:
-  - simozo
-  - stepEla95
-  - NicolaCorea
+{
+  "getAllAnimalsInput": {
+    "page": 0,
+    "limit": 10
+  }
+}
 
+------------------------------------------------------------------------------------------------------
+Update Animal endpoint, returns a String.
 
-We appreciate your effort and creativity in completing this test. If you have any questions or need clarification on the requirements, feel free to reach out.
+mutation UpdateAnimalName($updateParams: UpdateAnimalInput!) {
+  updateAnimal(updateAnimalInput: $updateParams) {
+    message
+  }
+}
 
-Happy coding!
+Update Animal input data.
+{
+  "updateParams": {
+    "id": 1,
+    "name": "chinto Name"
+  }
+}
+
+--------------------------------------------------------------------------------------------------------
+Eat Interface implmentation with functionality. I made an assumption of increasing the weight by 0.1
+
+mutation Eat($id: Int!) {
+  eat(id: $id) {
+    id
+    name
+    type
+    species
+    age
+    gender
+    weight
+    verse
+    createdAt
+    updatedAt
+    deletedAt
+  }
+}
+
+ID as input
+{
+  "id": 1
+}
+
+------------------------------------------------------------------------------------------------------------
+Sleep Interface implmentation with functionality. I made an assumption of increasing age by 1
+mutation Sleep($id: Int!) {
+  sleep(id: $id) {
+    id
+    name
+    type
+    species
+    age
+    gender
+    weight
+    verse
+    createdAt
+    updatedAt
+    deletedAt
+  }
+}
+
+ID as input
+{
+  "id": 1
+}
+
+---------------------------------------------------------------------------------------------------------------
+Returns the verse as a string.
+query Speak {
+  speak(id: 1) {
+    message
+  }
+}
+
+----------------------------------------------------------------------------------------------------------------
+I made an assumption and made all the records to be soft deleted.
+mutation RemoveAnimal($id: Int!) {
+  removeAnimal(id: $id) {
+    message
+  }
+}
+
+ID as Input
+{
+  "id": 1
+}

@@ -6,12 +6,16 @@ import { UpdateAnimalInput } from './dto/update-animal.input';
 import { CommonPayload } from './dto/common.dto';
 import { GetAllAnimalsPayload } from './dto/get-all-animals.dto';
 import { GetAllAnimalsInput } from './dto/get-all-animals.input';
+import { AnimalActions } from './animal-actions.interface';
+import { UseGuards } from '@nestjs/common';
+import { ApiKeyGuard } from './animal.guard';
 
 @Resolver(() => Animal)
-export class AnimalResolver {
+export class AnimalResolver implements AnimalActions{
   constructor(private readonly animalService: AnimalService) {}
 
-  @Query(() => Animal, { name: 'animal' })
+  @UseGuards(ApiKeyGuard)
+  @Query(() => Animal)
   async getAnimalById(@Args('id', { type: () => Int }) id: number) {
     return this.animalService.getAnimalById(id);
   }
@@ -26,27 +30,27 @@ export class AnimalResolver {
     return this.animalService.sleep(id);
   }
 
-  @Query(() => [Animal], { name: 'animal' })
+  @Query(() => CommonPayload)
   async speak(@Args('id', { type: () => Int }) id: number): Promise<CommonPayload> {
     return this.animalService.speak(id);
   }
 
-  @Query(() => [Animal], { name: 'animal' })
+  @Query(() => GetAllAnimalsPayload)
   async getAllAnimals(@Args('getAllAnimalsInput') getAllAnimalsInput: GetAllAnimalsInput): Promise<GetAllAnimalsPayload> {
     return this.animalService.getAll(getAllAnimalsInput);
   }
 
-  @Mutation(() => Animal)
+  @Mutation(() => CommonPayload)
   async updateAnimal(@Args('updateAnimalInput') updateAnimalInput: UpdateAnimalInput): Promise<CommonPayload> {
     return this.animalService.updateAnimal(updateAnimalInput.id, updateAnimalInput);
   }
 
-  @Mutation(() => Animal)
+  @Mutation(() => CommonPayload)
   async removeAnimal(@Args('id', { type: () => Int }) id: number): Promise<CommonPayload> {
     return this.animalService.removeAnimal(id);
   }
 
-  @Mutation(() => Animal)
+  @Mutation(() => CommonPayload)
   async createAnimal(@Args('createAnimalInput') createAnimalInput: CreateAnimalInput): Promise<CommonPayload> {
     return this.animalService.create(createAnimalInput);
   }

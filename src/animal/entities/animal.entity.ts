@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @ObjectType()
@@ -6,7 +6,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 export class Animal {
 
   @PrimaryGeneratedColumn('increment', { type: 'int', name: 'id' })
-  @Field(() => Number)
+  @Field(() => Int)
   id: number;
 
   @Column()
@@ -22,7 +22,7 @@ export class Animal {
   species: string;
 
   @Column({type: 'int'})
-  @Field(() => Number)
+  @Field(() => Int)
   age: number;
 
   @Column()
